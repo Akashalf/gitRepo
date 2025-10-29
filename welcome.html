@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Grand Stage</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #1b1b2f, #0f0f1a 80%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+      perspective: 1200px;
+    }
+
+    /* 🎞️ Stage floor */
+    .stage {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(to top, #3e2723, #5d4037);
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    /* 🎭 Curtains */
+    .curtain {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        #7a0000 0%,
+        #a40000 5%,
+        #7a0000 10%
+      );
+      box-shadow: inset -10px 0 20px rgba(0, 0, 0, 0.7);
+      border-top: 20px solid gold;
+      border-bottom: 15px solid goldenrod;
+      transform-origin: center;
+      z-index: 10;
+    }
+
+    .curtain.left {
+      left: 0;
+      animation: openLeft 4s ease-in-out forwards;
+    }
+
+    .curtain.right {
+      right: 0;
+      animation: openRight 4s ease-in-out forwards;
+    }
+
+    /* Golden ropes */
+    .curtain::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 8px;
+      height: 140px;
+      background: radial-gradient(circle, gold 20%, goldenrod 70%);
+      border-radius: 10px;
+      box-shadow: 0 0 10px gold;
+    }
+
+    .curtain.left::after { right: -5px; }
+    .curtain.right::after { left: -5px; }
+
+    /* Rope tie */
+    .curtain::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 60px;
+      height: 10px;
+      background: linear-gradient(90deg, gold, goldenrod);
+      border-radius: 5px;
+      box-shadow: 0 0 10px gold;
+    }
+
+    .curtain.left::before { right: -30px; }
+    .curtain.right::before { left: -30px; }
+
+    /* Curtain animations */
+    @keyframes openLeft {
+      0% { transform: translateX(0) rotateY(0); }
+      30% { transform: rotateY(8deg); }
+      100% { transform: translateX(-100%) rotateY(25deg); }
+    }
+
+    @keyframes openRight {
+      0% { transform: translateX(0) rotateY(0); }
+      30% { transform: rotateY(-8deg); }
+      100% { transform: translateX(100%) rotateY(-25deg); }
+    }
+
+    /* 💡 Stage light effect */
+    .spotlight {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(255,255,200,0.3), transparent 70%);
+      opacity: 0;
+      animation: fadeLight 4s ease-in-out 2s forwards;
+      z-index: 1;
+    }
+
+    @keyframes fadeLight {
+      to { opacity: 1; }
+    }
+
+    /* ✨ Welcome Message */
+    .welcome {
+      position: relative;
+      z-index: 5;
+      opacity: 0;
+      animation: fadeIn 2.5s ease-in 4.2s forwards;
+      text-shadow: 0 0 20px gold, 0 0 40px orange;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 3em;
+      margin: 0;
+      color: #fff5b7;
+    }
+
+    .flag {
+      display: inline-block;
+      animation: wave 1.5s infinite ease-in-out;
+      transform-origin: bottom center;
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(15deg); }
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: sparkle 3s infinite ease-in-out;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.5); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="curtain left"></div>
+  <div class="curtain right"></div>
+  <div class="spotlight"></div>
+  <div class="welcome">
+    <h1 id="welcomeText"></h1>
+  </div>
+  <div class="stage"></div>
+
+  <script>
+    // Add sparkles
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement("div");
+      s.classList.add("sparkle");
+      s.style.top = Math.random() * 100 + "%";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.animationDelay = Math.random() * 3 + "s";
+      document.body.appendChild(s);
+    }
+
+    // Get name and display message
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    const welcomeText = document.getElementById("welcomeText");
+    if (name) {
+      welcomeText.innerHTML = `🎉 Hi <span style="color:#ffeb3b;">${name}</span>!<br>Welcome to <strong style="color:#00eaff;">India</strong> 🇮🇳 <span class="flag">🏳️‍🌈</span>`;
+    } else {
+      welcomeText.innerHTML = "Welcome to India 🇮🇳";
+    }
+  </script>
+</body>
+</html>
